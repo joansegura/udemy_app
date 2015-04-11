@@ -5,7 +5,11 @@ class CompaniesController < ApplicationController
 
   def index
     @companies = Company.all
-    respond_with(@companies)
+
+    respond_to do |format|
+      format.html
+      format.csv { render text: @companies.to_csv }
+    end
   end
 
   def show
@@ -40,8 +44,6 @@ class CompaniesController < ApplicationController
     Company.import(params[:file])
     redirect_to companies_path, notice: "Companies added Successfully"
   end
-
-
 
   private
     def set_company
